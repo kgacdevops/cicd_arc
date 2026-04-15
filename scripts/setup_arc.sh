@@ -38,4 +38,4 @@ kubectl create secret generic "$secret_name" -n "$arc_namespace" --from-literal=
 helm install arc -n "${arc_namespace}-systems" --create-namespace oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
 
 # Install Runners
-helm install "$runner_label" -n "$arc_namespace" --create-namespace --set githubConfigUrl="https://github.com/${git_owner_name}/${git_repo_name}" --set githubConfigSecret="$secret_name" oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+helm install "$runner_label" -n "$arc_namespace" --create-namespace --set githubConfigUrl="https://github.com/${git_owner_name}/${git_repo_name}" --set githubConfigSecret="$secret_name" oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set --set minRunners=3 --set maxRunners=5
