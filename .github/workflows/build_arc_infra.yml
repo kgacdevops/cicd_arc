@@ -28,7 +28,7 @@ jobs:
     - name: Checkout CICD Repository
       uses: actions/checkout@v4
       with:
-        repository: kgacandole/arc_cicd
+        repository: kgacandole/cicd_arc
         ref: main
         path: cicd
     
