@@ -1,19 +1,13 @@
-name: Build Arc Infra
-run-name: build arc infra
+name: Install ARC
+run-name: Install ARC
 on:
   workflow_call:
     inputs:
-      ACTION:
-        description: "Action"
-        type: string
       CLOUD_PROVIDER:
         description: "Cloud Provider"
         type: string
       REGION:
         description: "Region (Location)"
-        type: string
-      RUN_INSTALL_ARC:
-        description: "Install ARC"
         type: string
 
 jobs:
