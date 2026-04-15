@@ -41,14 +41,14 @@ jobs:
 
     # Pre-deploy steps
     - name: Setup up Google Cloud Auth
-      if: github.event.inputs.CLOUD_PROVIDER == 'gcp'
+      if: inputs.CLOUD_PROVIDER == 'gcp'
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: "projects/${{ vars.GCP_PROJECT_NUM }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
         service_account: "${{ vars.SVC_ACCOUNT }}@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
     
     - name: Setup Azure Auth
-      if: github.event.inputs.CLOUD_PROVIDER == 'azure'
+      if: inputs.CLOUD_PROVIDER == 'azure'
       uses: azure/login@v2
       with:
         client-id: ${{ vars.AZURE_CLIENT_ID }}
@@ -57,7 +57,7 @@ jobs:
     
     # Run Terraform
     - name: Run Terraform
-      if: github.event.inputs.ACTION != 'skip'
+      if: inputs.ACTION != 'skip'
       uses: kgacandole/cicd_arc/actions/run_terraform@main
       env:
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
@@ -74,7 +74,7 @@ jobs:
     
     # Post Terraform Steps - Install/Setup ARC
     - name: Install ARC
-      if: github.event.inputs.RUN_INSTALL_ARC == 'true' && github.event.inputs.ACTION != 'destroy'
+      if: inputs.RUN_INSTALL_ARC == 'true' && inputs.ACTION != 'destroy'
       uses: kgacandole/cicd_arc/actions/install_arc@main
       with:
         cloudProvider: ${{ inputs.CLOUD_PROVIDER }}
