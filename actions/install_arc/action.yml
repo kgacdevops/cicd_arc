@@ -42,7 +42,7 @@ runs:
     run: |      
       if [ "${{ inputs.cloudProvider }}" == "azure" ]; then
         az account set --subscription ${{ inputs.subscriptionId }}
-        az aks command invoke --resource-group "${{ inputs.resourceGroupName }}" --name "${{ inputs.clusterName }}" --file "cicd/scripts/setup_arc.sh" --command "export GH_TOKEN="${{ env.GH_TOKEN }}" && chmod ugo+rwx setup_arc.sh && ./setup_arc.sh ${{ inputs.cloudProvider}}"        
+        az aks command invoke --resource-group "${{ inputs.resourceGroupName }}" --name "${{ inputs.clusterName }}" --file "cicd/scripts/setup_arc.sh" --command 'export GH_TOKEN="${{ env.GH_TOKEN }}" && chmod ugo+rwx setup_arc.sh && ./setup_arc.sh ${{ inputs.cloudProvider}}'       
       else
         export GH_TOKEN="${{ env.GH_TOKEN }}"
         chmod ugo+rwx cicd/scripts/setup_arc.sh
