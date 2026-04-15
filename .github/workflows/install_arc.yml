@@ -18,6 +18,7 @@ jobs:
     env:
       GH_APP_ID: ${{ secrets.GH_APP_ID }}
       GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
+      GH_INSTALLATION_ID: ${{ secrets.GH_INSTALLATION_ID }}
       OWNER_NAME: kgacandole
       CLUSTER_NAME: "${{ vars.RESOURCE_PREFIX }}-cluster"
     steps:
@@ -73,13 +74,7 @@ jobs:
     
     - name: Setup Github PEM
       shell: bash
-      run: printf '%s\n' "${{ secrets.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
-    
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: pem_file
-        path: github_app_key.pem
+      run: printf '%s\n' "${{ env.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
     
     - name: Setup Arc - Azure
       if: inputs.CLOUD_PROVIDER == 'azure'
@@ -88,4 +83,4 @@ jobs:
         RESOURCE_GROUP_NAME: "${{ vars.RESOURCE_PREFIX }}-aks-rg"
       run: |
         az account set --subscription ${{ vars.AZURE_SUBSCRIPTION_ID }}
-        az aks command invoke --resource-group "${{ env.RESOURCE_GROUP_NAME }}" --name "${{ env.CLUSTER_NAME }}" --file "cicd/scripts/setup_arc.sh" --file "github_app_key.pem" --command "GH_APP_ID=${{ secrets.GH_APP_ID }} GH_INSTALLATION_ID=${{ secrets.GH_INSTALLATION_ID}} bash setup_arc.sh azure"
+        az aks command invoke --resource-group "${{ env.RESOURCE_GROUP_NAME }}" --name "${{ env.CLUSTER_NAME }}" --file "cicd/scripts/setup_arc.sh" --file "github_app_key.pem" --command "GH_APP_ID=${{ env.GH_APP_ID }} GH_INSTALLATION_ID=${{ env.GH_INSTALLATION_ID}} bash setup_arc.sh azure"
