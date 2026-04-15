@@ -37,7 +37,7 @@ jobs:
       with:
         repository: kgacandole/iac_terraform
         ref: main
-        path: iac    
+        path: iac
 
     # Pre-deploy steps
     - name: Setup up Google Cloud Auth
@@ -54,6 +54,36 @@ jobs:
         client-id: ${{ vars.AZURE_CLIENT_ID }}
         tenant-id: ${{ vars.AZURE_TENANT_ID }}
         subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+    
+    # Setup TF Vars
+    - name: Prepare Vars
+      id: vars
+      uses: actions/github-script@v7
+      with:
+        script: |
+          regionName = "${{ inputs.REGION }}"
+          regionZone = ""
+
+          checkRegion = "${{ inputs.REGION }}".match(/-[abc]$/)          
+          if(checkRegion){
+            regionZone = "${{ inputs.REGION }}"
+            regionName = "${{ inputs.REGION }}".replaceAll(checkRegion[0], "")
+          }
+          
+          core.setOutput("regionName", regionName)
+          core.setOutput("regionZone", regionZone)
+          core.setOutput("vmSize", JSON.parse(JSON.stringify(${{ vars.VM_SIZE_MAP }}))[regionName])
+          
+    - name: Setup TF Vars
+      shell: bash
+      run: |
+        cd iac/arc_infra/${{ inputs.CLOUD_PROVIDER }}
+        sed -i 's/{PREFIX}/${{ vars.RESOURCE_PREFIX }}/g' terraform.tfvars
+        sed -i 's/{REGION}/${{ steps.vars.outputs.regionName }}/g' terraform.tfvars
+        sed -i 's/{REGION_ZONE}/${{ steps.vars.outputs.regionZone }}/g' terraform.tfvars
+        sed -i 's/{PROJECT_ID}/${{ vars.GCP_PROJECT_ID }}/g' terraform.tfvars
+        sed -i 's/{VM_SIZE}/${{ steps.vars.outputs.vmSize }}/g' terraform.tfvars
+        cat terraform.tfvars
     
     # Run Terraform
     - name: Run Terraform
@@ -78,7 +108,7 @@ jobs:
       uses: kgacandole/cicd_arc/actions/install_arc@main
       with:
         cloudProvider: ${{ inputs.CLOUD_PROVIDER }}
-        clusterName: ${{ vars.CLUSTER_NAME }}
+        clusterName: "${{ vars.RESOURCE_PREFIX }}-cluster"
         regionName: ${{ inputs.REGION }}
         resourceGroupName: ${{ vars.AZURE_RESOURCE_GROUP_NAME }}
         subscriptionId: ${{ vars.AZURE_SUBSCRIPTION_ID }}
