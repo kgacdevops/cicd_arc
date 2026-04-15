@@ -94,7 +94,7 @@ jobs:
         az account set --subscription ${{ vars.AZURE_SUBSCRIPTION_ID }}
         az aks command invoke --resource-group "${{ env.RESOURCE_GROUP_NAME }}" --name "${{ env.CLUSTER_NAME }}" --file "cicd/scripts/setup_arc.sh" --file "github_app_key.pem" --command "GH_APP_ID=${{ env.GH_APP_ID }} GH_INSTALLATION_ID=${{ env.GH_INSTALLATION_ID}} bash setup_arc.sh azure"
     
-    - name: Install Arc - ${{ inputs.CLOUD_PROVIDER }}
+    - name: Install Arc - AWS/GCP
       if: inputs.CLOUD_PROVIDER != 'azure'
       shell: bash
       run: |
