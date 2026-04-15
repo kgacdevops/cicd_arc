@@ -73,7 +73,10 @@ jobs:
     
     - name: Setup Github PEM
       shell: bash
-      run: echo "${{ secrets.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
+      run: |
+        printf '%s\n' "${{ secrets.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
+        cat github_app_key.pem
+        head -1 github_app_key.pem
     
     - name: Setup Arc - Azure
       if: inputs.CLOUD_PROVIDER == 'azure'
