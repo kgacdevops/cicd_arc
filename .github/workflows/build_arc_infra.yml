@@ -80,8 +80,9 @@ jobs:
   install_arc:
     name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}
     if: inputs.ACTION == 'apply'
-    uses: kgacandole/cicd_arc/.github/workflows/build_arc_infra.yml@main
+    uses: kgacandole/cicd_arc/.github/workflows/install_arc.yml@main
     secrets: inherit
+    needs: [build_infra]
     with:
       CLOUD_PROVIDER: ${{ inputs.CLOUD_PROVIDER }}
       REGION: ${{ inputs.REGION }}
