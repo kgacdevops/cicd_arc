@@ -19,11 +19,11 @@ jobs:
       GH_APP_ID: ${{ secrets.GH_APP_ID }}
       GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
       GH_INSTALLATION_ID: ${{ secrets.GH_INSTALLATION_ID }}
-      OWNER_NAME: kgacandole
+      OWNER_NAME: kgacdevops
       CLUSTER_NAME: "${{ vars.RESOURCE_PREFIX }}-cluster"
     steps:
     - name: Generate GH Token
-      uses: kgacandole/github_automation_scripts/.github/actions/generateGithubToken@main
+      uses: kgacdevops/github_automation_scripts/.github/actions/generateGithubToken@main
 
     - name: Validate Inputs
       id: vars
@@ -45,7 +45,7 @@ jobs:
     - name: Checkout CICD Repository
       uses: actions/checkout@v4
       with:
-        repository: kgacandole/cicd_arc
+        repository: kgacdevops/cicd_arc
         ref: main
         path: cicd
     

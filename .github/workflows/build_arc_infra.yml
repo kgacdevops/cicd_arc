@@ -23,20 +23,20 @@ jobs:
       env:
         GH_APP_ID: ${{ secrets.GH_APP_ID }}
         GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
-        OWNER_NAME: kgacandole
-      uses: kgacandole/github_automation_scripts/.github/actions/generateGithubToken@main
+        OWNER_NAME: kgacdevops
+      uses: kgacdevops/github_automation_scripts/.github/actions/generateGithubToken@main
 
     - name: Checkout CICD Repository
       uses: actions/checkout@v4
       with:
-        repository: kgacandole/cicd_arc
+        repository: kgacdevops/cicd_arc
         ref: main
         path: cicd
     
     - name: Checkout Terraform Repository
       uses: actions/checkout@v4
       with:
-        repository: kgacandole/iac_terraform
+        repository: kgacdevops/iac_terraform
         ref: main
         path: iac
 
@@ -59,7 +59,7 @@ jobs:
     # Run Terraform
     - name: Run Terraform
       if: inputs.ACTION != 'skip'
-      uses: kgacandole/cicd_arc/actions/run_terraform@main
+      uses: kgacdevops/cicd_arc/actions/run_terraform@main
       env:
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
         ARM_USE_OIDC: true
@@ -80,7 +80,7 @@ jobs:
   install_arc:
     name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}
     if: inputs.ACTION == 'apply'
-    uses: kgacandole/cicd_arc/.github/workflows/install_arc.yml@main
+    uses: kgacdevops/cicd_arc/.github/workflows/install_arc.yml@main
     secrets: inherit
     needs: [build_infra]
     with:

@@ -6,7 +6,7 @@ arc_namespace="arc"
 cert_mgr_namespace="cert-manager"
 cert_mgr_ver="v1.12.0"
 secret_name="arc-secret"
-git_owner_name="kgacandole"
+git_owner_name="kgacdevops"
 git_repo_name="github_arc"
 cloud_provider="$1"
 runner_label="kg-runner-${cloud_provider}"
@@ -38,4 +38,4 @@ kubectl create secret generic "$secret_name" -n "$arc_namespace" --from-literal=
 helm install arc -n "${arc_namespace}-systems" --create-namespace oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
 
 # Install Runners
-helm install "$runner_label" -n "$arc_namespace" --create-namespace --set githubConfigUrl="https://github.com/${git_owner_name}/${git_repo_name}" --set githubConfigSecret="$secret_name" oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set --set minRunners=3 --set maxRunners=5
+helm install "$runner_label" -n "$arc_namespace" --create-namespace --set githubConfigUrl="https://github.com/${git_owner_name}/${git_repo_name}" --set githubConfigSecret="$secret_name" oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set --set minRunners=3 --set maxRunners=5 --set runnerScaleSetLabels[0]="$cloud_provider"
