@@ -16,7 +16,7 @@ full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gservi
 
 # Create Bucket for state file
 gcloud storage buckets create "gs://${tfstate_bucket_name}" \
-    --location="${region}" \
+    --location="${region^^}" \
     --uniform-bucket-level-access
 
 # Create workload identity pool
