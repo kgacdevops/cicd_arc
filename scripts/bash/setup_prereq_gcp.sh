@@ -14,12 +14,8 @@ svc_account_name_compute="kube-svc-account"
 full_svc_account_id_tf="${svc_account_name_tf}@${projectId}.iam.gserviceaccount.com"
 full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gserviceaccount.com"
 
-# Create Bucket for state file
-gcloud storage buckets create "gs://${tfstate_bucket_name}" \
-    --location="${region^^}" \
-    --uniform-bucket-level-access
-
-# Create workload identity pool
+#### Below steps are expected to be performed prior to this script ####
+# Create workload identity pool 
 # gcloud iam workload-identity-pools create "$identity_pool_name" \
 #     --location="global" \
 #     --description="Pool for GitHub Actions" \
@@ -32,6 +28,18 @@ gcloud storage buckets create "gs://${tfstate_bucket_name}" \
 #     --issuer-uri="https://token.actions.githubusercontent.com" \
 #     --attribute-mapping="google.subject=assertion.sub,attribute.repository_owner=assertion.repository_owner" \
 #     --attribute-condition="assertion.repository_owner == '$org_name'"
+
+# Add binding to the devops-svc-account for the identity pool to impersonate access (use a diff account to execute below cmd)
+#gcloud iam service-accounts add-iam-policy-binding <devops_svc_account> --member="principalSet://iam.googleapis.com/projects/<gcp_project_num>/locations/global/workloadIdentityPools/github-pool/attribute.repository/<org_name>/<repo_name>" --role="roles/iam.serviceAccountTokenCreator"
+
+# Add binding to the svc-account to allow granting of project-level binding
+# gcloud projects add-iam-policy-binding <project_id> --member="serviceAccount:<devops_svc_account>@<project_id>.iam.gserviceaccount.com" --role="roles/resourcemanager.projectIamAdmin" --condition=None
+## ----------------------------------------------------------------- ##
+
+# Create Bucket for state file
+gcloud storage buckets describe "gs://${tfstate_bucket_name}" || gcloud storage buckets create "gs://${tfstate_bucket_name}" \
+    --location="${region^^}" \
+    --uniform-bucket-level-access
 
 # Create service account for Terraform
 gcloud iam service-accounts create "$svc_account_name_tf" --display-name="Service Account for Terraform"
