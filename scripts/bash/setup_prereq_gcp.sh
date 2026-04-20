@@ -69,7 +69,7 @@ gcloud iam service-accounts add-iam-policy-binding "$full_svc_account_id_tf" \
 gcloud projects add-iam-policy-binding "$projectId" \
   --member="serviceAccount:${full_svc_account_id_tf}" \
   --role="roles/container.admin" \
-  --condition="expression=true,title=always_allow,description=No restrictions"
+  --condition=None
 
 gcloud iam service-accounts add-iam-policy-binding "$full_svc_account_id_tf" \
   --member="serviceAccount:${full_svc_account_id_tf}" \
