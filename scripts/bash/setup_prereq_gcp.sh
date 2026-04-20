@@ -37,15 +37,18 @@ full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gservi
 ## ----------------------------------------------------------------- ##
 
 # Create Bucket for state file
+echo "Creating TF State Bucket.."
 gcloud storage buckets describe "gs://${tfstate_bucket_name}" || gcloud storage buckets create "gs://${tfstate_bucket_name}" \
     --location="${region^^}" \
     --uniform-bucket-level-access
 
 # Create service account for Terraform
-gcloud iam service-accounts create "$svc_account_name_tf" --display-name="Service Account for Terraform"
+echo "Creating Service Account for Terraform"
+gcloud iam service-accounts describe "$full_svc_account_id_tf" || gcloud iam service-accounts create "$svc_account_name_tf" --display-name="Service Account for Terraform"
 
 # Create service account for Compute (Nodes)
-gcloud iam service-accounts create "$svc_account_name_compute" --display-name="Service Account for Kube Cluster/Compute resources"
+echo "Creating Service Account for Kubernetes Nodes.."
+gcloud iam service-accounts describe "$full_svc_account_id_compute" || gcloud iam service-accounts create "$svc_account_name_compute" --display-name="Service Account for Kube Cluster/Compute resources"
 
 # Add policy to bucket
 gcloud storage buckets add-iam-policy-binding "gs://${tfstate_bucket_name}" \
