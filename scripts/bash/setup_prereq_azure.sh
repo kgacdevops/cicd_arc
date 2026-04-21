@@ -3,7 +3,7 @@ region="$1"
 
 resourceGroup="arc_tfstate_rg"
 storageAccount="arcstorageacct"
-storageContainer="arc_tfstate_container"
+storageContainer="arc-tfstate-container"
 
 echo "Creating Resource Group.."
 az group create --name "$resourceGroup" --location "$region"
