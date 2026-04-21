@@ -37,10 +37,10 @@ full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gservi
 ## ----------------------------------------------------------------- ##
 
 echo "Check Identity Pool.."
-gcloud iam workload-identity-pools providers update-oidc gh-identity-provider \
-    --workload-identity-pool="$identity_pool_name" \
-    --location="global" \
-    --attribute-mapping="google.subject=assertion.sub,attribute.repository_owner=assertion.repository_owner"
+gcloud iam workload-identity-pools providers describe "gh-identity-provider" \
+  --workload-identity-pool="$identity_pool_name" \
+  --location="global" \
+  --format="yaml(attributeMapping)"
 
 echo "Create Bucket for state file.."
 gcloud storage buckets describe "gs://${tfstate_bucket_name}" || gcloud storage buckets create "gs://${tfstate_bucket_name}" \
