@@ -76,6 +76,9 @@ jobs:
         vmSizeMap: ${{ vars.VM_SIZE_MAP }}
         projectId: ${{ vars.GCP_PROJECT_ID }}
         regionName: ${{ inputs.REGION }}
+        tfStateBucket: ${{ vars.BUCKET_NAME_TFSTATE }}
+        tfStateRg: ${{ vars.RESOURCE_GROUP_TFSTATE }}
+        tfStateStorageAccount: ${{ vars.STORAGE_ACCOUNT_NAME_TFSTATE }}
   
   install_arc:
     name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}

@@ -19,6 +19,15 @@ inputs:
   projectId:
     description: 'GCP Project Id'
     type: string
+  tfStateBucket:
+    description: 'Bucket name for TF State'
+    type: string
+  tfStateRg:
+    description: 'Resource Group of TF State resources (Azure)'
+    type: string
+  tfStateStorageAccount:
+    description: 'Storage account of TF State Container (Azure)'
+    type: string
 
 runs:
   using: "composite"
@@ -51,6 +60,11 @@ runs:
       sed -i 's/{PROJECT_ID}/${{ inputs.projectId }}/g' terraform.tfvars
       sed -i 's/{VM_SIZE}/${{ steps.vars.outputs.vmSize }}/g' terraform.tfvars
       cat terraform.tfvars
+
+      sed -i 's/{TFSTATE_BUCKET_NAME}/${{ inputs.tfStateBucket }}/g' backend.tf
+      sed -i 's/{TFSTATE_RG_NAME}/${{ inputs.tfStateRg }}/g' backend.tf
+      sed -i 's/{TFSTATE_STORAGE_ACCT}/${{ inputs.tfStateStorageAccount }}/g' backend.tf
+      cat backend.tf
 
   - name: Get Runner IP
     if: inputs.cloudProvider == 'azure'
