@@ -12,7 +12,7 @@ on:
 
 jobs:
   install_prereq_gcp:
-    name: Install Arc - GCP
+    name: Install PreReqs - GCP
     if: inputs.CLOUD_PROVIDER == 'gcp'
     runs-on: [ubuntu-latest]
     environment: ${{ inputs.CLOUD_PROVIDER }}
@@ -41,7 +41,7 @@ jobs:
         ./setup_prereq_gcp.sh "${{ vars.GCP_PROJECT_ID }}" "${{ vars.GCP_PROJECT_NUM }}" "${{ inputs.REGION }}"
   
   install_prereq_azure:
-    name: Install Arc - Azure
+    name: Install PreReqs - Azure
     if: inputs.CLOUD_PROVIDER == 'azure'
     runs-on: [ubuntu-latest]
     environment: ${{ inputs.CLOUD_PROVIDER }}
