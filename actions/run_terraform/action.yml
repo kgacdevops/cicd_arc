@@ -28,7 +28,13 @@ inputs:
   tfStateStorageAccount:
     description: 'Storage account of TF State Container (Azure)'
     type: string
-
+  tfServiceAccount:
+    description: 'Service account name used by Terraform'
+    type: string
+  nodesServiceAccount:
+    description: 'Service account name for Kubernetes Nodes (GCP)'
+    type: string
+    
 runs:
   using: "composite"
   steps:
@@ -59,6 +65,8 @@ runs:
       sed -i 's/{REGION_ZONE}/${{ steps.vars.outputs.regionZone }}/g' terraform.tfvars
       sed -i 's/{PROJECT_ID}/${{ inputs.projectId }}/g' terraform.tfvars
       sed -i 's/{VM_SIZE}/${{ steps.vars.outputs.vmSize }}/g' terraform.tfvars
+      sed -i 's/TF_SVC_ACCOUNT/${{ inputs.tfServiceAccount }}/g' terraform.tfvars
+      sed -i 's/NODES_SVC_ACCOUNT/${{ inputs.nodesServiceAccount }}/g' terraform.tfvars
       cat terraform.tfvars
 
       sed -i 's/{TFSTATE_BUCKET_NAME}/${{ inputs.tfStateBucket }}/g' backend.tf

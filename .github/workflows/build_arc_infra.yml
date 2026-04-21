@@ -79,6 +79,8 @@ jobs:
         tfStateBucket: ${{ vars.BUCKET_NAME_TFSTATE }}
         tfStateRg: ${{ vars.RESOURCE_GROUP_TFSTATE }}
         tfStateStorageAccount: ${{ vars.STORAGE_ACCOUNT_NAME_TFSTATE }}
+        tfServiceAccount: ${{ vars.SVC_ACCOUNT }}
+        nodesServiceAccount: ${{ vars.SVC_ACCOUNT_NODES }}
   
   install_arc:
     name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}
