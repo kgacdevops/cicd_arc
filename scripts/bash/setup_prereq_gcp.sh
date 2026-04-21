@@ -1,19 +1,6 @@
 #!/bin/bash
 set -e
 
-projectId="$1"
-projectNum="$2"
-region="$3"
-
-org_name="kgacdevops"
-identity_pool_name="gh-identity-pool"      
-tfstate_bucket_name="arc_tfstate_bucket"  
-
-svc_account_name_tf="tf-svc-account"
-svc_account_name_compute="kube-svc-account"
-full_svc_account_id_tf="${svc_account_name_tf}@${projectId}.iam.gserviceaccount.com"
-full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gserviceaccount.com"
-
 #### Below steps are expected to be performed prior to this script ####
 # Create workload identity pool 
 # gcloud iam workload-identity-pools create "$identity_pool_name" \
@@ -35,6 +22,19 @@ full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gservi
 # Add binding to the svc-account to allow granting of project-level binding
 # gcloud projects add-iam-policy-binding <project_id> --member="serviceAccount:<devops_svc_account>@<project_id>.iam.gserviceaccount.com" --role="roles/resourcemanager.projectIamAdmin" --condition=None
 ## ----------------------------------------------------------------- ##
+
+projectId="$1"
+projectNum="$2"
+region="$3"
+
+org_name="kgacdevops"
+identity_pool_name="gh-identity-pool"      
+tfstate_bucket_name="arc_tfstate_bucket"  
+
+svc_account_name_tf="tf-svc-account"
+svc_account_name_compute="kube-svc-account"
+full_svc_account_id_tf="${svc_account_name_tf}@${projectId}.iam.gserviceaccount.com"
+full_svc_account_id_compute="${svc_account_name_compute}@${projectId}.iam.gserviceaccount.com"
 
 echo "Create Bucket for state file.."
 gcloud storage buckets describe "gs://${tfstate_bucket_name}" || gcloud storage buckets create "gs://${tfstate_bucket_name}" \
