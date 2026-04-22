@@ -67,6 +67,9 @@ runs:
       sed -i 's/{VM_SIZE}/${{ steps.vars.outputs.vmSize }}/g' terraform.tfvars
       sed -i 's/{TF_SVC_ACCOUNT}/${{ inputs.tfServiceAccount }}/g' terraform.tfvars
       sed -i 's/{NODES_SVC_ACCOUNT}/${{ inputs.nodesServiceAccount }}/g' terraform.tfvars
+      sed -i 's/{GH_APP_ID}/${{ env.GH_APP_ID }}/g' terraform.tfvars
+      sed -i 's/{GH_INSTALLATION_ID}/${{ env.GH_INSTALLATION_ID }}/g' terraform.tfvars
+      sed -i 's/{GH_OWNER}/${{ env.OWNER_NAME }}/g' terraform.tfvars
       cat terraform.tfvars
 
       sed -i 's/{TFSTATE_BUCKET_NAME}/${{ inputs.tfStateBucket }}/g' backend.tf
