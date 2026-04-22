@@ -46,11 +46,14 @@ serviceAccountsList="$svc_account_name_tf,$svc_account_name_compute"
 IFS="," read -ra SVCACCOUNTS <<< "$serviceAccountsList"
 for sa in "${SVCACCOUNTS[@]}"; do
   gcloud iam service-accounts describe "${sa}@${projectId}.iam.gserviceaccount.com" || gcloud iam service-accounts create "$sa" --display-name="Terrform managed SA"
-  gcloud iam service-accounts add-iam-policy-binding "${sa}@${projectId}.iam.gserviceaccount.com" --member="serviceAccount:"${sa}@${projectId}.iam.gserviceaccount.com"" --role="roles/iam.serviceAccountUser"
 done
 
 echo "Updating policy on TF State Bucket.."
 gcloud storage buckets add-iam-policy-binding "gs://${tfstate_bucket_name}" --member="serviceAccount:${full_svc_account_id_tf}" --role="roles/storage.admin"
+
+echo "Allow usage of service accounts.."
+gcloud iam service-accounts add-iam-policy-binding "${full_svc_account_id_tf}" --member="serviceAccount:${full_svc_account_id_tf}" --role="roles/iam.serviceAccountUser"
+gcloud iam service-accounts add-iam-policy-binding "${full_svc_account_id_compute}" --member="serviceAccount:${full_svc_account_id_tf}" --role="roles/iam.serviceAccountUser"
 
 echo "Adding IAM bindings on TF Svc Account and Identity Pool.."
 identityPoolRoles="iam.workloadIdentityUser,iam.serviceAccountTokenCreator"
