@@ -114,7 +114,7 @@ runs:
       printf '%s\n' "${{ env.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
 
       terraform init
-      terraform plan
+      #terraform plan
       if [[ "${{ inputs.tfAction }}" == "apply" ]]; then
         terraform apply -auto-approve
       elif [[ "${{ inputs.tfAction }}" == "destroy" ]]; then
