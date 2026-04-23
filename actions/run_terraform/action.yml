@@ -91,6 +91,7 @@ runs:
       inlineScript: |
         echo "Whitelisting Runner IP"
         az storage account update --name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --public-network-access Enabled
+        az storage account update --name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --set networkRuleSet.ipRules=[]
         az storage account network-rule add --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --ip-address ${{ env.RUNNER_IP }}
         echo "Propagating whitelisting..."
         sleep 30
