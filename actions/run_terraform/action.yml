@@ -94,10 +94,6 @@ runs:
         az storage account network-rule add --account-name ${{ env.STORAGE_ACCOUNT_NAME }} --resource-group ${{ env.RESOURCE_GROUP }} --ip-address ${{ env.RUNNER_IP }}
         echo "Propagating whitelisting..."
         sleep 30
-  
-  - name: Setup Github PEM
-    shell: bash
-    run: printf '%s\n' "${{ env.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
 
   # Terraform Steps
   - name: Setup Terraform
@@ -113,6 +109,8 @@ runs:
     shell: bash
     run: |
       cd iac/arc_infra/${{ inputs.cloudProvider }}
+      printf '%s\n' "${{ env.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
+
       terraform init
       terraform plan
       if [[ "${{ inputs.tfAction }}" == "apply" ]]; then
