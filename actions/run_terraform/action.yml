@@ -118,5 +118,5 @@ runs:
       if [[ "${{ inputs.tfAction }}" == "apply" ]]; then
         terraform apply -auto-approve
       elif [[ "${{ inputs.tfAction }}" == "destroy" ]]; then
-        terraform destroy -auto-approve
+        terraform destroy -auto-approve -refresh=false
       fi
