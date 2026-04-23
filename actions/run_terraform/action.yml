@@ -110,8 +110,6 @@ runs:
     shell: bash
     run: |
       cd iac/arc_infra/${{ inputs.cloudProvider }}
-      printf '%s\n' "${{ env.GH_APP_PRIVATE_KEY }}" > github_app_key.pem
-
       terraform init
       terraform plan
       if [[ "${{ inputs.tfAction }}" == "apply" ]]; then
