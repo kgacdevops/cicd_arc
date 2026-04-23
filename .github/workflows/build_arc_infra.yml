@@ -83,12 +83,12 @@ jobs:
         tfServiceAccount: ${{ vars.SVC_ACCOUNT }}
         nodesServiceAccount: ${{ vars.SVC_ACCOUNT_NODES }}
   
-  install_arc:
-    name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}
-    if: inputs.ACTION == 'apply'
-    uses: kgacdevops/cicd_arc/.github/workflows/install_arc.yml@main
-    secrets: inherit
-    needs: [build_infra]
-    with:
-      CLOUD_PROVIDER: ${{ inputs.CLOUD_PROVIDER }}
-      REGION: ${{ inputs.REGION }}
+  # install_arc:
+  #   name: Install Arc for ${{ inputs.CLOUD_PROVIDER }}
+  #   if: inputs.ACTION == 'apply'
+  #   uses: kgacdevops/cicd_arc/.github/workflows/install_arc.yml@main
+  #   secrets: inherit
+  #   needs: [build_infra]
+  #   with:
+  #     CLOUD_PROVIDER: ${{ inputs.CLOUD_PROVIDER }}
+  #     REGION: ${{ inputs.REGION }}
